@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>One Piece Tracker Ultimate</title>
+    <title>One Piece Tracker Pro | Official Order</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
@@ -50,9 +50,9 @@
             z-index: 100;
         }
 
-        .brand { font-weight: 800; color: var(--gold); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .brand { font-weight: 800; color: var(--gold); cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
 
-        /* SIDEBAR COMPLETO */
+        /* SIDEBAR PROFESIONAL */
         .sidebar {
             position: fixed;
             left: -100%;
@@ -81,12 +81,12 @@
 
         .overlay.active { display: block; }
 
-        .search-container { padding: 1.5rem 1.5rem 0.5rem; }
+        .search-container { padding: 1.5rem 1.2rem 0.5rem; }
 
         #arc-list {
             flex: 1;
             overflow-y: auto;
-            padding: 0 1.5rem 1.5rem;
+            padding: 0 1.2rem 1.5rem;
         }
 
         /* ARCOS Y BOTONES 1x1 */
@@ -95,6 +95,7 @@
             border-radius: 8px;
             margin-bottom: 8px;
             background: rgba(255,255,255,0.02);
+            transition: 0.2s;
         }
 
         .arc-header {
@@ -102,7 +103,7 @@
             cursor: pointer;
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: var(--text-main);
         }
@@ -114,11 +115,11 @@
             padding: 0;
             max-height: 0;
             overflow: hidden;
-            background: #00000033;
+            background: #00000022;
         }
 
         .arc-card.open .cap-grid { 
-            max-height: 400px; 
+            max-height: 450px; 
             padding: 10px; 
             overflow-y: auto; 
         }
@@ -127,15 +128,15 @@
             background: var(--border);
             border: none;
             color: var(--text-main);
-            padding: 8px 0;
+            padding: 10px 0;
             border-radius: 4px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-align: center;
         }
 
         .cap-btn-item:active { background: var(--primary); }
 
-        /* MAIN */
+        /* MAIN UI */
         .main-container { padding: 1rem; max-width: 600px; margin: 0 auto; }
 
         .card {
@@ -192,35 +193,35 @@
 <body>
 
     <header>
-        <div class="brand" onclick="toggleMenu()">☠️ VER ARCOS</div>
-        <button onclick="toggleTheme()" style="background:none; border:1px solid var(--border); color:var(--text-main); padding:6px 12px; border-radius:6px; font-size: 12px;">🌓 Tema</button>
+        <div class="brand" onclick="toggleMenu()">☠️ EXPLORAR ARCOS</div>
+        <button onclick="toggleTheme()" style="background:none; border:1px solid var(--border); color:var(--text-main); padding:6px 12px; border-radius:6px; font-size: 11px;">🌓 Tema</button>
     </header>
 
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
     <aside id="sidebar" class="sidebar">
         <div class="search-container">
-            <h3 style="margin: 0 0 10px 0;">Todos los Arcos</h3>
-            <input type="text" placeholder="Buscar arco o capítulo..." oninput="buscarCap(this.value)">
+            <h3 style="margin: 0 0 10px 0; font-size: 1.1rem;">Cronología Oficial</h3>
+            <input type="text" placeholder="Buscar arco..." oninput="buscarArco(this.value)">
         </div>
         <div id="arc-list"></div>
     </aside>
 
     <main class="main-container">
         <div class="card" style="text-align: center;">
-            <span class="stat-label">Progreso del Viaje</span>
+            <span class="stat-label">Progreso del Anime</span>
             <div id="pct-display">0%</div>
             <div class="progress-wrapper"><div id="bar" class="progress-bar"></div></div>
-            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-dim);">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim);">
                 <span id="label-actual">Capítulo: 0</span>
                 <span>Meta: 1159</span>
             </div>
         </div>
 
         <div class="card">
-            <span class="stat-label">Tu posición actual</span>
-            <input type="number" id="actual-input" placeholder="Ingresa capítulo">
-            <button class="btn-primary" onclick="calcular()">Actualizar Datos</button>
+            <span class="stat-label">¿Por qué capítulo vas?</span>
+            <input type="number" id="actual-input" placeholder="Ej: 480">
+            <button class="btn-primary" onclick="calcular()">Actualizar Progreso</button>
         </div>
 
         <div class="stats-grid">
@@ -229,42 +230,35 @@
                 <span id="res-val" class="stat-value">--</span>
             </div>
             <div class="card">
-                <span class="stat-label">Días (3 cap/día)</span>
+                <span class="stat-label">Días (Ritmo 3/día)</span>
                 <span id="date-val" class="stat-value">--</span>
             </div>
         </div>
     </main>
 
 <script>
+    // CRONOLOGÍA ESTRICTA ONE PIECE (ANIME)
     const DATA = {
         total: 1159,
         arcs: [
             {n:"East Blue", s:1, e:61},
-            {n:"Filler: Apis", s:54, e:60}, // Algunos fillers están solapados o son mini-arcos
-            {n:"Entrada Grand Line", s:62, e:77},
-            {n:"Isla Drum", s:78, e:91},
-            {n:"Alabasta", s:92, e:130},
-            {n:"Post-Alabasta (Filler)", s:131, e:143},
-            {n:"Isla del Cielo (Skypiea)", s:144, e:206},
-            {n:"G-8 (Filler)", s:207, e:228},
-            {n:"Long Ring Long Land", s:229, e:263},
-            {n:"Water 7", s:264, e:312},
-            {n:"Enies Lobby", s:313, e:336},
-            {n:"Post-Enies Lobby", s:337, e:384},
-            {n:"Thriller Bark", s:385, e:456},
-            {n:"Sabaody Archipelago", s:457, e:489},
-            {n:"Amazon Lily", s:490, e:516},
-            {n:"Impel Down", s:517, e:549},
-            {n:"Marineford", s:550, e:574},
-            {n:"3D2Y (Post-Guerra)", s:575, e:622},
-            {n:"Isla Gyojin", s:623, e:653},
-            {n:"Punk Hazard", s:654, e:746},
-            {n:"Dressrosa", s:747, e:889},
-            {n:"Zou", s:890, e:916},
-            {n:"Whole Cake Island", s:917, e:1085},
-            {n:"Levely", s:1086, e:1096},
-            {n:"Wano Kuni", s:1097, e:1150},
-            {n:"Egghead", s:1151, e:1159}
+            {n:"Arabasta Saga", s:62, e:135},
+            {n:"Sky Island Saga (Skypiea)", s:136, e:206},
+            {n:"Water 7 / Enies Lobby", s:207, e:325},
+            {n:"Thriller Bark", s:326, e:384},
+            {n:"Sabaody Archipelago", s:385, e:405},
+            {n:"Island of Women (Amazon Lily)", s:406, e:421},
+            {n:"Impel Down", s:422, e:456},
+            {n:"Marineford", s:457, e:489},
+            {n:"Post-War (3D2Y)", s:490, e:516},
+            {n:"Fish-Man Island", s:517, e:574},
+            {n:"Punk Hazard", s:575, e:622},
+            {n:"Dressrosa", s:623, e:746},
+            {n:"Zou", s:747, e:779},
+            {n:"Whole Cake Island", s:780, e:877},
+            {n:"Levely", s:878, e:889},
+            {n:"Wano Kuni", s:890, e:1085},
+            {n:"Egghead (Actual)", s:1086, e:1159}
         ]
     };
 
@@ -274,7 +268,6 @@
             const div = document.createElement('div');
             div.className = 'arc-card';
             let caps = '';
-            // AQUÍ APARECEN TODOS 1 POR 1
             for(let i=arc.s; i<=arc.e; i++) {
                 caps += `<button class="cap-btn-item" onclick="selectCap(${i})">${i}</button>`;
             }
@@ -287,7 +280,7 @@
             list.appendChild(div);
         });
 
-        const saved = localStorage.getItem('op-cap-v2');
+        const saved = localStorage.getItem('op-cap-final');
         if(saved) {
             document.getElementById('actual-input').value = saved;
             calcular();
@@ -314,7 +307,9 @@
 
     function calcular() {
         const val = parseInt(document.getElementById('actual-input').value) || 0;
-        localStorage.setItem('op-cap-v2', val);
+        if(val > DATA.total) return alert("¡Has superado la meta actual!");
+        
+        localStorage.setItem('op-cap-final', val);
 
         const res = Math.max(0, DATA.total - val);
         const pct = ((val / DATA.total) * 100).toFixed(1);
@@ -322,17 +317,16 @@
         document.getElementById('pct-display').textContent = pct + '%';
         document.getElementById('bar').style.width = pct + '%';
         document.getElementById('label-actual').textContent = 'Capítulo: ' + val;
-        document.getElementById('res-val').textContent = res + ' capítulos';
+        document.getElementById('res-val').textContent = res + ' caps';
         document.getElementById('date-val').textContent = Math.ceil(res / 3) + ' días';
     }
 
     function toggleTheme() { document.body.classList.toggle('light'); }
 
-    function buscarCap(q) {
+    function buscarArco(q) {
         const query = q.toLowerCase();
         document.querySelectorAll('.arc-card').forEach(el => {
-            const match = el.textContent.toLowerCase().includes(query);
-            el.style.display = match ? 'block' : 'none';
+            el.style.display = el.textContent.toLowerCase().includes(query) ? 'block' : 'none';
         });
     }
 
