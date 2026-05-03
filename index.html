@@ -5,27 +5,72 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>One Piece Tracker Pro</title>
 
+<!-- AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1836624801202112" crossorigin="anonymous"></script>
+
 <meta name="theme-color" content="#2c1b0e">
 
 <style>
-:root { --gold:#ffcc00; --bg:#0a1118; --wood:#2c1b0e; --accent:#d9411e; --border:#4a3728; --card-bg:#162130; }
+:root {
+--gold:#ffcc00;
+--bg:#0a1118;
+--wood:#2c1b0e;
+--accent:#d9411e;
+--border:#4a3728;
+--card-bg:#162130;
+--text:#f0f0f0;
+}
 
-body { margin:0; font-family:sans-serif; background:var(--bg); color:#f0f0f0; }
+.light-mode {
+--bg:#f4f4f4;
+--wood:#ffffff;
+--card-bg:#ffffff;
+--text:#111;
+--border:#ccc;
+}
 
+/* GENERAL */
+body {
+margin:0;
+font-family:sans-serif;
+background:var(--bg);
+color:var(--text);
+transition:0.3s;
+}
+
+/* HEADER */
 header {
-display:flex; justify-content:space-between; align-items:center;
-padding:1rem; background:var(--wood);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:1rem;
+background:var(--wood);
 border-bottom:3px solid var(--gold);
-position:sticky; top:0; z-index:100;
+position:sticky;
+top:0;
+z-index:100;
+}
+
+/* BOTÓN MODO */
+.theme-btn {
+background:var(--accent);
+color:#fff;
+border:none;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+font-size:0.7rem;
 }
 
 /* SIDEBAR */
 .sidebar {
-position:fixed; left:-100%; top:0;
-width:300px; height:100%;
+position:fixed;
+left:-100%;
+top:0;
+width:300px;
+height:100%;
 background:var(--wood);
-transition:0.4s ease;
+transition:0.4s;
 z-index:1000;
 border-right:2px solid var(--gold);
 overflow-y:auto;
@@ -34,9 +79,11 @@ overflow-y:auto;
 .sidebar.active { left:0; }
 
 .overlay {
-position:fixed; inset:0;
+position:fixed;
+inset:0;
 background:rgba(0,0,0,0.8);
-display:none; z-index:999;
+display:none;
+z-index:999;
 }
 
 .overlay.active { display:block; }
@@ -47,123 +94,110 @@ padding:10px;
 border-bottom:1px solid var(--gold);
 }
 
-.search-box input {
-width:100%;
-padding:10px;
-border-radius:8px;
-border:none;
-background:#0d141d;
-color:var(--gold);
-}
-
-/* ARCOS MEJORADOS */
-.arc {
-border-bottom:1px solid var(--border);
-animation:fadeIn 0.4s ease;
-}
+/* ARCOS */
+.arc { border-bottom:1px solid var(--border); }
 
 .arc-header {
-padding:14px 16px;
+padding:14px;
 cursor:pointer;
-color:var(--gold);
-font-weight:bold;
 display:flex;
 justify-content:space-between;
-align-items:center;
-background:rgba(0,0,0,0.25);
-transition:0.25s;
-}
-
-.arc-header:hover {
-background:rgba(0,0,0,0.45);
+color:var(--gold);
+background:rgba(0,0,0,0.2);
 }
 
 .arc-header small {
-transition:transform 0.3s;
+transition:0.3s;
 }
 
 .arc.open .arc-header small {
 transform:rotate(180deg);
 }
 
-/* ANIMACIÓN DESPLEGABLE */
 .cap-list {
 max-height:0;
 overflow:hidden;
-transition:max-height 0.4s ease;
-background:rgba(0,0,0,0.5);
+transition:0.4s;
 }
 
 .arc.open .cap-list {
-max-height:260px;
+max-height:250px;
 overflow-y:auto;
 }
 
-/* ITEMS */
 .cap-item {
-padding:8px 16px;
-font-size:0.8rem;
-border-bottom:1px solid rgba(255,255,255,0.05);
+padding:8px 14px;
 cursor:pointer;
+font-size:0.8rem;
 transition:0.2s;
-opacity:0;
-transform:translateX(-10px);
-animation:slideIn 0.3s forwards;
 }
 
 .cap-item:hover {
-background:rgba(255,255,255,0.08);
+background:rgba(255,255,255,0.1);
 color:var(--gold);
 }
 
-/* ANIMACIONES */
-@keyframes fadeIn {
-from {opacity:0;}
-to {opacity:1;}
+/* CONTENIDO */
+.container {
+max-width:500px;
+margin:0 auto;
+padding:1rem 1rem 120px;
 }
 
-@keyframes slideIn {
-to {
-opacity:1;
-transform:translateX(0);
+.card {
+background:var(--card-bg);
+border:1px solid var(--border);
+border-radius:12px;
+padding:18px;
+margin-bottom:15px;
 }
+
+h2 {
+color:var(--gold);
+font-size:1rem;
+margin:0 0 12px;
+border-left:3px solid var(--gold);
+padding-left:10px;
 }
 
-/* RESTO IGUAL */
-.container { max-width:500px; margin:0 auto; padding:1rem 1rem 120px; }
-.card { background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:18px; margin-bottom:15px; }
+input {
+width:100%;
+padding:12px;
+background:#0d141d;
+border:1px solid #2d3748;
+color:var(--gold);
+border-radius:8px;
+margin-bottom:10px;
+}
 
-h2 { color:var(--gold); font-size:1rem; margin:0 0 12px; border-left:3px solid var(--gold); padding-left:10px; }
+button {
+width:100%;
+padding:14px;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
 
-input { width:100%; padding:12px; background:#0d141d; border:1px solid #2d3748; color:var(--gold); border-radius:8px; margin-bottom:10px; }
+.btn-main {
+background:var(--accent);
+color:white;
+margin-bottom:10px;
+}
 
-.options-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px; }
+.bar-bg {
+height:12px;
+background:#000;
+border-radius:20px;
+overflow:hidden;
+margin:12px 0;
+}
 
-.check-item { display:flex; align-items:center; gap:8px; font-size:0.8rem; background:rgba(0,0,0,0.2); padding:10px; border-radius:6px; }
-
-button { width:100%; padding:14px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; }
-
-.btn-main { background:var(--accent); color:white; box-shadow:0 4px 0 #8b2610; margin-bottom:10px; }
-
-.btn-reset { background:#334155; color:#cbd5e1; font-size:0.7rem; }
-
-.bar-bg { height:12px; background:#000; border-radius:20px; overflow:hidden; margin:12px 0; border:1px solid #2d3748; }
-
-.bar-fill { height:100%; width:0%; background:linear-gradient(90deg,#d9411e,#ffcc00); transition:1s; }
-
-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
-
-td { padding:10px 0; border-bottom:1px solid #2d3748; }
-
-.bounty { color:#00ff00; font-family:monospace; text-align:right; font-weight:bold; }
-
-.ad-banner {
-position:fixed; bottom:0; left:0; width:100%;
-background:var(--wood);
-border-top:2px solid var(--gold);
-text-align:center;
-padding:5px 0;
-z-index:2000;
+.bar-fill {
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#d9411e,#ffcc00);
+transition:1s;
 }
 </style>
 </head>
@@ -171,16 +205,14 @@ z-index:2000;
 <body>
 
 <header>
-<div onclick="toggleMenu()" style="cursor:pointer; color:var(--gold); font-weight:bold;">☠️ ARCOS</div>
-<div style="font-weight:bold;">OP <span style="color:var(--gold)">TRACKER</span></div>
+<div onclick="toggleMenu()" style="cursor:pointer;color:var(--gold)">☠️ ARCOS</div>
+<div>OP TRACKER</div>
+<button class="theme-btn" onclick="toggleTheme()">Modo</button>
 </header>
 
 <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
 <div id="sidebar" class="sidebar">
-<div style="padding:15px;">
-<h3 style="color:var(--gold)">Mapa de Arcos</h3>
-</div>
 
 <div class="search-box">
 <input type="text" placeholder="Buscar capítulo..." oninput="buscarCap(this.value)">
@@ -190,77 +222,110 @@ z-index:2000;
 </div>
 
 <div class="container">
-<!-- TODO TU CONTENIDO IGUAL -->
+
+<div class="card">
+<h2>Capítulo Actual</h2>
+<input type="number" id="actual" value="0">
+<button class="btn-main" onclick="calcular()">Calcular</button>
+</div>
+
+<div class="card">
+<h2>Progreso</h2>
+<div id="pct">0%</div>
+<div class="bar-bg"><div id="bar" class="bar-fill"></div></div>
+</div>
+
 </div>
 
 <script>
 const TOTAL = 1159;
 
 const ARCS = [
-{n:"East Blue", s:1, e:61},
-{n:"Alabasta", s:62, e:135},
-{n:"Skypiea", s:136, e:206},
-{n:"Water 7", s:207, e:325},
-{n:"Thriller Bark", s:326, e:384},
-{n:"Guerra Cumbre", s:385, e:516},
-{n:"Isla Gyojin", s:517, e:574},
-{n:"Dressrosa", s:629, e:750},
-{n:"Wano", s:890, e:1085},
-{n:"Egghead", s:1086, e:TOTAL}
+{n:"East Blue",s:1,e:61},
+{n:"Alabasta",s:62,e:135},
+{n:"Skypiea",s:136,e:206},
+{n:"Water 7",s:207,e:325},
+{n:"Thriller Bark",s:326,e:384},
+{n:"Guerra",s:385,e:516},
+{n:"Wano",s:890,e:1085},
+{n:"Egghead",s:1086,e:TOTAL}
 ];
 
-window.toggleMenu = () => {
+/* MENU */
+function toggleMenu(){
 sidebar.classList.toggle("active");
 overlay.classList.toggle("active");
-};
+}
 
-window.toggleArc = (el) => {
-document.querySelectorAll('.arc').forEach(a=>{
-if(a!==el.parentElement) a.classList.remove('open');
+/* ARCOS */
+function toggleArc(el){
+document.querySelectorAll(".arc").forEach(a=>{
+if(a!==el.parentElement) a.classList.remove("open");
 });
-el.parentElement.classList.toggle('open');
-};
+el.parentElement.classList.toggle("open");
+}
 
-window.initArcs = () => {
-const list = document.getElementById("arc-list");
-list.innerHTML = "";
+function initArcs(){
+const list=document.getElementById("arc-list");
 
 ARCS.forEach(arc=>{
-const div = document.createElement("div");
+const div=document.createElement("div");
 div.className="arc";
 
-div.innerHTML = `
+div.innerHTML=`
 <div class="arc-header" onclick="toggleArc(this)">
 <span>${arc.n}</span><small>▼</small>
 </div>
 <div class="cap-list">
 ${Array.from({length:arc.e-arc.s+1},(_,i)=>{
-const n=arc.s+i;
-return `<div class="cap-item" data-name="Capítulo ${n}" onclick="selectCap(${n})">Capítulo ${n}</div>`;
-}).join('')}
+let n=arc.s+i;
+return `<div class="cap-item" data-name="capitulo ${n}" onclick="selectCap(${n})">Capítulo ${n}</div>`;
+}).join("")}
 </div>
 `;
 
 list.appendChild(div);
 });
-};
+}
 
-window.selectCap = (n) => {
-document.getElementById("actual").value = n;
+function selectCap(n){
+document.getElementById("actual").value=n;
 toggleMenu();
-};
+}
 
-/* 🔍 BUSCADOR */
-window.buscarCap = (texto) => {
-texto = texto.toLowerCase();
+/* BUSCADOR */
+function buscarCap(txt){
+txt=txt.toLowerCase();
 
 document.querySelectorAll(".cap-item").forEach(el=>{
-const name = el.dataset.name.toLowerCase();
-el.style.display = name.includes(texto) ? "block" : "none";
+el.style.display = el.dataset.name.includes(txt) ? "block":"none";
 });
-};
+}
 
-window.onload = initArcs;
+/* CALCULO */
+function calcular(){
+let actual=parseInt(document.getElementById("actual").value)||0;
+let pct=Math.round((actual/TOTAL)*100);
+
+document.getElementById("pct").textContent=pct+"%";
+document.getElementById("bar").style.width=pct+"%";
+}
+
+/* MODO OSCURO / CLARO */
+function toggleTheme(){
+document.body.classList.toggle("light-mode");
+localStorage.setItem("theme",document.body.classList.contains("light-mode")?"light":"dark");
+}
+
+/* CARGAR TEMA */
+window.onload=()=>{
+initArcs();
+
+const saved=localStorage.getItem("theme");
+if(saved==="light"){
+document.body.classList.add("light-mode");
+}
+};
 </script>
 
 </body>
