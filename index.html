@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>One Piece Tracker Pro</title>
+    <title>One Piece Tracker Ultimate</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
@@ -35,11 +35,9 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
-            line-height: 1.5;
             overflow-x: hidden;
         }
 
-        /* --- HEADER --- */
         header {
             display: flex;
             justify-content: space-between;
@@ -52,29 +50,20 @@
             z-index: 100;
         }
 
-        .brand {
-            font-weight: 800;
-            font-size: 1rem;
-            color: var(--gold);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .brand { font-weight: 800; color: var(--gold); cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
-        /* --- SIDEBAR REFORMADO --- */
+        /* SIDEBAR COMPLETO */
         .sidebar {
             position: fixed;
             left: -100%;
             top: 0;
             width: 85%;
-            max-width: 300px;
+            max-width: 320px;
             height: 100%;
             background: var(--sidebar-bg);
             box-shadow: 10px 0 30px rgba(0,0,0,0.5);
             transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1001;
-            padding: 1.5rem;
             display: flex;
             flex-direction: column;
         }
@@ -92,14 +81,15 @@
 
         .overlay.active { display: block; }
 
+        .search-container { padding: 1.5rem 1.5rem 0.5rem; }
+
         #arc-list {
             flex: 1;
             overflow-y: auto;
-            margin-top: 1rem;
-            padding-right: 5px;
+            padding: 0 1.5rem 1.5rem;
         }
 
-        /* --- ARCOS --- */
+        /* ARCOS Y BOTONES 1x1 */
         .arc-card {
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -114,6 +104,7 @@
             justify-content: space-between;
             font-size: 0.85rem;
             font-weight: 600;
+            color: var(--text-main);
         }
 
         .cap-grid {
@@ -123,134 +114,103 @@
             padding: 0;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease;
+            background: #00000033;
         }
 
-        .arc-card.open .cap-grid { max-height: 300px; padding: 8px; overflow-y: auto; }
+        .arc-card.open .cap-grid { 
+            max-height: 400px; 
+            padding: 10px; 
+            overflow-y: auto; 
+        }
 
-        .cap-btn-small {
+        .cap-btn-item {
             background: var(--border);
             border: none;
             color: var(--text-main);
-            padding: 6px 2px;
+            padding: 8px 0;
             border-radius: 4px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
+            text-align: center;
         }
 
-        /* --- CONTENIDO PRINCIPAL --- */
-        .main-container {
-            padding: 1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        .cap-btn-item:active { background: var(--primary); }
+
+        /* MAIN */
+        .main-container { padding: 1rem; max-width: 600px; margin: 0 auto; }
 
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 1.25rem;
+            padding: 1.5rem;
             margin-bottom: 1rem;
         }
 
-        /* TAMAÑO DE TEXTO ADAPTATIVO */
         #pct-display {
-            font-size: clamp(2.5rem, 10vw, 4rem);
+            font-size: clamp(2.5rem, 12vw, 4.5rem);
             font-weight: 800;
             color: var(--primary);
             margin: 0.5rem 0;
             line-height: 1;
         }
 
-        .stat-label { 
-            color: var(--text-dim); 
-            font-size: 0.75rem; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
-            display: block;
-        }
+        .stat-label { color: var(--text-dim); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value { font-size: 1.1rem; font-weight: 600; display: block; margin-top: 4px; }
 
-        .stat-value { 
-            font-size: 1.1rem; 
-            font-weight: 600; 
-            margin-top: 4px;
-            word-break: break-word; /* Evita que el texto largo rompa la caja */
-        }
+        .progress-wrapper { background: #000; height: 10px; border-radius: 10px; margin: 1.2rem 0; overflow: hidden; }
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--gold)); transition: 1s ease; }
 
-        /* BARRA PROGRESO */
-        .progress-wrapper {
-            background: #000;
-            height: 10px;
-            border-radius: 10px;
-            margin: 1rem 0;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--primary), var(--gold));
-            transition: width 0.8s ease;
-        }
-
-        /* INPUTS Y BOTONES */
         input[type="number"], input[type="text"] {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: var(--bg);
             border: 2px solid var(--border);
             border-radius: 8px;
             color: var(--gold);
             font-size: 1rem;
             margin-top: 8px;
+            outline: none;
         }
 
         .btn-primary {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 14px;
+            padding: 16px;
             border-radius: 8px;
             font-weight: 800;
             width: 100%;
             margin-top: 12px;
             cursor: pointer;
+            text-transform: uppercase;
         }
 
-        /* GRID DE STATS INFERIOR */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-        }
-
-        @media (min-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-        }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        @media (max-width: 400px) { .stats-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand" onclick="toggleMenu()">☠️ ARCOS</div>
-        <button onclick="toggleTheme()" style="background:none; border:1px solid var(--border); color:var(--text-main); padding:5px 10px; border-radius:5px; font-size: 12px;">🌓 Tema</button>
+        <div class="brand" onclick="toggleMenu()">☠️ VER ARCOS</div>
+        <button onclick="toggleTheme()" style="background:none; border:1px solid var(--border); color:var(--text-main); padding:6px 12px; border-radius:6px; font-size: 12px;">🌓 Tema</button>
     </header>
 
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
     <aside id="sidebar" class="sidebar">
-        <h3 style="margin: 0 0 1rem 0; font-size: 1.2rem;">Arcos</h3>
-        <input type="text" placeholder="Buscar..." oninput="buscarCap(this.value)" style="margin-bottom: 1rem; font-size: 14px;">
+        <div class="search-container">
+            <h3 style="margin: 0 0 10px 0;">Todos los Arcos</h3>
+            <input type="text" placeholder="Buscar arco o capítulo..." oninput="buscarCap(this.value)">
+        </div>
         <div id="arc-list"></div>
     </aside>
 
     <main class="main-container">
-        
         <div class="card" style="text-align: center;">
-            <span class="stat-label">Progreso General</span>
+            <span class="stat-label">Progreso del Viaje</span>
             <div id="pct-display">0%</div>
-            <div class="progress-wrapper">
-                <div id="bar" class="progress-bar"></div>
-            </div>
+            <div class="progress-wrapper"><div id="bar" class="progress-bar"></div></div>
             <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-dim);">
                 <span id="label-actual">Capítulo: 0</span>
                 <span>Meta: 1159</span>
@@ -258,23 +218,19 @@
         </div>
 
         <div class="card">
-            <span class="stat-label">¿En qué capítulo estás?</span>
-            <input type="number" id="actual-input" placeholder="0">
-            <button class="btn-primary" onclick="calcular()">ACTUALIZAR</button>
+            <span class="stat-label">Tu posición actual</span>
+            <input type="number" id="actual-input" placeholder="Ingresa capítulo">
+            <button class="btn-primary" onclick="calcular()">Actualizar Datos</button>
         </div>
 
         <div class="stats-grid">
             <div class="card">
                 <span class="stat-label">Restantes</span>
-                <span class="stat-value" id="res-val">--</span>
+                <span id="res-val" class="stat-value">--</span>
             </div>
             <div class="card">
-                <span class="stat-label">Días para terminar</span>
-                <span class="stat-value" id="date-val">--</span>
-            </div>
-            <div class="card" style="grid-column: 1 / -1;">
-                <span class="stat-label">Tiempo total de visualización</span>
-                <span class="stat-value" id="time-val">--</span>
+                <span class="stat-label">Días (3 cap/día)</span>
+                <span id="date-val" class="stat-value">--</span>
             </div>
         </div>
     </main>
@@ -282,20 +238,33 @@
 <script>
     const DATA = {
         total: 1159,
-        minPerCap: 22,
         arcs: [
             {n:"East Blue", s:1, e:61},
-            {n:"Alabasta", s:62, e:135},
-            {n:"Skypiea", s:136, e:206},
-            {n:"Water 7 / Enies Lobby", s:207, e:325},
-            {n:"Thriller Bark", s:326, e:384},
-            {n:"Summit War", s:385, e:516},
-            {n:"Fish-Man Island", s:517, e:574},
-            {n:"Punk Hazard", s:575, e:622},
-            {n:"Dressrosa", s:623, e:746},
-            {n:"Zou / Whole Cake", s:747, e:889},
-            {n:"Wano Kuni", s:890, e:1085},
-            {n:"Egghead", s:1086, e:1159}
+            {n:"Filler: Apis", s:54, e:60}, // Algunos fillers están solapados o son mini-arcos
+            {n:"Entrada Grand Line", s:62, e:77},
+            {n:"Isla Drum", s:78, e:91},
+            {n:"Alabasta", s:92, e:130},
+            {n:"Post-Alabasta (Filler)", s:131, e:143},
+            {n:"Isla del Cielo (Skypiea)", s:144, e:206},
+            {n:"G-8 (Filler)", s:207, e:228},
+            {n:"Long Ring Long Land", s:229, e:263},
+            {n:"Water 7", s:264, e:312},
+            {n:"Enies Lobby", s:313, e:336},
+            {n:"Post-Enies Lobby", s:337, e:384},
+            {n:"Thriller Bark", s:385, e:456},
+            {n:"Sabaody Archipelago", s:457, e:489},
+            {n:"Amazon Lily", s:490, e:516},
+            {n:"Impel Down", s:517, e:549},
+            {n:"Marineford", s:550, e:574},
+            {n:"3D2Y (Post-Guerra)", s:575, e:622},
+            {n:"Isla Gyojin", s:623, e:653},
+            {n:"Punk Hazard", s:654, e:746},
+            {n:"Dressrosa", s:747, e:889},
+            {n:"Zou", s:890, e:916},
+            {n:"Whole Cake Island", s:917, e:1085},
+            {n:"Levely", s:1086, e:1096},
+            {n:"Wano Kuni", s:1097, e:1150},
+            {n:"Egghead", s:1151, e:1159}
         ]
     };
 
@@ -305,23 +274,31 @@
             const div = document.createElement('div');
             div.className = 'arc-card';
             let caps = '';
-            for(let i=arc.s; i<=arc.e; i+=5) { // Saltos de 5 para no saturar el móvil
-                caps += `<button class="cap-btn-small" onclick="selectCap(${i})">${i}</button>`;
+            // AQUÍ APARECEN TODOS 1 POR 1
+            for(let i=arc.s; i<=arc.e; i++) {
+                caps += `<button class="cap-btn-item" onclick="selectCap(${i})">${i}</button>`;
             }
             div.innerHTML = `
-                <div class="arc-header" onclick="this.parentElement.classList.toggle('open')">
-                    ${arc.n} <span>▼</span>
+                <div class="arc-header" onclick="toggleArc(this)">
+                    ${arc.n} <span style="font-size:10px">▼</span>
                 </div>
                 <div class="cap-grid">${caps}</div>
             `;
             list.appendChild(div);
         });
 
-        const saved = localStorage.getItem('op-cap');
+        const saved = localStorage.getItem('op-cap-v2');
         if(saved) {
             document.getElementById('actual-input').value = saved;
             calcular();
         }
+    }
+
+    function toggleArc(el) {
+        const card = el.parentElement;
+        const isOpen = card.classList.contains('open');
+        document.querySelectorAll('.arc-card').forEach(c => c.classList.remove('open'));
+        if(!isOpen) card.classList.add('open');
     }
 
     function toggleMenu() {
@@ -337,31 +314,25 @@
 
     function calcular() {
         const val = parseInt(document.getElementById('actual-input').value) || 0;
-        localStorage.setItem('op-cap', val);
+        localStorage.setItem('op-cap-v2', val);
 
-        const res = DATA.total - val;
+        const res = Math.max(0, DATA.total - val);
         const pct = ((val / DATA.total) * 100).toFixed(1);
 
         document.getElementById('pct-display').textContent = pct + '%';
         document.getElementById('bar').style.width = pct + '%';
         document.getElementById('label-actual').textContent = 'Capítulo: ' + val;
-        document.getElementById('res-val').textContent = res + ' caps';
-        
-        const totalMin = res * DATA.minPerCap;
-        const hours = Math.floor(totalMin / 60);
-        document.getElementById('time-val').textContent = hours + ' horas aprox.';
-
-        const days = Math.ceil(res / 3); // Promedio 3 caps/día
-        document.getElementById('date-val').textContent = days + ' días';
+        document.getElementById('res-val').textContent = res + ' capítulos';
+        document.getElementById('date-val').textContent = Math.ceil(res / 3) + ' días';
     }
 
-    function toggleTheme() {
-        document.body.classList.toggle('light');
-    }
+    function toggleTheme() { document.body.classList.toggle('light'); }
 
     function buscarCap(q) {
+        const query = q.toLowerCase();
         document.querySelectorAll('.arc-card').forEach(el => {
-            el.style.display = el.textContent.toLowerCase().includes(q.toLowerCase()) ? 'block' : 'none';
+            const match = el.textContent.toLowerCase().includes(query);
+            el.style.display = match ? 'block' : 'none';
         });
     }
 
