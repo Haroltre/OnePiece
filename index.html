@@ -1,316 +1,431 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>One Piece Tracker Pro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Piece Tracker | Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1836624801202112" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #d9411e;
+            --primary-hover: #b33218;
+            --gold: #ffcc00;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --sidebar-bg: #111827;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: #334155;
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-<style>
-:root {
---gold:#ffcc00;
---bg:#0a1118;
---wood:#2c1b0e;
---accent:#d9411e;
---border:#4a3728;
---card-bg:#162130;
---text:#f0f0f0;
-}
+        .light {
+            --bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --sidebar-bg: #f8fafc;
+            --text-main: #1e293b;
+            --text-dim: #64748b;
+            --border: #e2e8f0;
+        }
 
-/* MODO CLARO */
-.light {
---bg:#f4f4f4;
---wood:#ffffff;
---card-bg:#ffffff;
---text:#111;
---border:#ccc;
-}
+        * { box-sizing: border-box; }
 
-body {
-margin:0;
-font-family:sans-serif;
-background:var(--bg);
-color:var(--text);
-transition:0.3s;
-}
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-/* HEADER */
-header {
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:1rem;
-background:var(--wood);
-border-bottom:3px solid var(--gold);
-}
+        /* --- HEADER --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--sidebar-bg);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
 
-.theme-btn {
-background:var(--accent);
-color:white;
-border:none;
-padding:8px 12px;
-border-radius:6px;
-cursor:pointer;
-}
+        .brand {
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
 
-/* SIDEBAR */
-.sidebar {
-position:fixed;
-left:-100%;
-top:0;
-width:300px;
-height:100%;
-background:var(--wood);
-transition:0.4s;
-z-index:1000;
-overflow-y:auto;
-}
+        .header-actions { display: flex; gap: 15px; }
 
-.sidebar.active { left:0; }
+        /* --- SIDEBAR --- */
+        .sidebar {
+            position: fixed;
+            left: -320px;
+            top: 0;
+            width: 320px;
+            height: 100%;
+            background: var(--sidebar-bg);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.3);
+            transition: var(--transition);
+            z-index: 1001;
+            padding: 20px;
+        }
 
-.overlay {
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.7);
-display:none;
-}
+        .sidebar.active { left: 0; }
 
-.overlay.active { display:block; }
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            z-index: 1000;
+        }
 
-/* BUSCADOR */
-.search-box {
-padding:10px;
-border-bottom:1px solid var(--gold);
-}
+        .overlay.active { display: block; }
 
-/* ARCOS */
-.arc { border-bottom:1px solid var(--border); }
+        /* --- ARCS LIST --- */
+        #arc-list {
+            margin-top: 20px;
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            padding-right: 5px;
+        }
 
-.arc-header {
-padding:14px;
-cursor:pointer;
-display:flex;
-justify-content:space-between;
-color:var(--gold);
-}
+        .arc-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
 
-.arc-header small {
-transition:0.3s;
-}
+        .arc-header {
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.03);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
 
-.arc.open small { transform:rotate(180deg); }
+        .arc-header:hover { background: rgba(255,255,255,0.08); }
 
-.cap-list {
-max-height:0;
-overflow:hidden;
-transition:0.4s;
-}
+        .cap-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            padding: 10px;
+            max-height: 0;
+            overflow: hidden;
+            background: rgba(0,0,0,0.2);
+            transition: max-height 0.3s ease-out;
+        }
 
-.arc.open .cap-list {
-max-height:250px;
-overflow:auto;
-}
+        .arc-card.open .cap-grid { max-height: 400px; overflow-y: auto; }
 
-.cap-item {
-padding:8px;
-cursor:pointer;
-transition:0.2s;
-}
+        .cap-btn {
+            background: var(--border);
+            border: none;
+            color: var(--text-main);
+            padding: 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
 
-.cap-item:hover {
-background:rgba(255,255,255,0.1);
-color:var(--gold);
-}
+        .cap-btn:hover { background: var(--primary); }
 
-/* CONTENIDO */
-.container {
-max-width:500px;
-margin:auto;
-padding:1rem 1rem 120px;
-}
+        /* --- MAIN CONTENT --- */
+        .main-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            width: 100%;
+        }
 
-.card {
-background:var(--card-bg);
-border:1px solid var(--border);
-border-radius:12px;
-padding:18px;
-margin-bottom:15px;
-}
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
 
-h2 {
-color:var(--gold);
-margin-bottom:10px;
-}
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
 
-input {
-width:100%;
-padding:12px;
-border-radius:8px;
-border:1px solid #2d3748;
-background:#0d141d;
-color:var(--gold);
-}
+        .progress-circle-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-button {
-width:100%;
-padding:14px;
-background:var(--accent);
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-margin-top:10px;
-}
+        #pct-display {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 10px 0;
+        }
 
-.bar-bg {
-height:12px;
-background:#000;
-border-radius:20px;
-overflow:hidden;
-margin:10px 0;
-}
+        /* --- FORM ELEMENTS --- */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
 
-.bar-fill {
-height:100%;
-width:0%;
-background:linear-gradient(90deg,#d9411e,#ffcc00);
-transition:1s;
-}
-</style>
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--gold);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus { border-color: var(--primary); }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        /* --- PROGRESS BAR --- */
+        .progress-wrapper {
+            background: var(--border);
+            height: 14px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--gold));
+            transition: width 1s ease-in-out;
+            box-shadow: 0 0 15px rgba(217, 65, 30, 0.4);
+        }
+
+        .stat-label { color: var(--text-dim); font-size: 0.85rem; text-transform: uppercase; }
+        .stat-value { font-size: 1.2rem; font-weight: 600; display: block; margin-top: 5px; }
+
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .sidebar { width: 85%; }
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
-<div onclick="toggleMenu()">☠️ ARCOS</div>
-<div>OP TRACKER</div>
-<button class="theme-btn" onclick="toggleTheme()">Modo</button>
-</header>
+    <header>
+        <div class="brand" onclick="toggleMenu()">
+            <span>☠️</span> <span>ARCOS</span>
+        </div>
+        <div class="header-actions">
+            <button class="cap-btn" style="padding: 8px 15px" onclick="toggleTheme()">🌓 Tema</button>
+        </div>
+    </header>
 
-<div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
-<div id="sidebar" class="sidebar">
+    <aside id="sidebar" class="sidebar">
+        <h3 style="margin-top:0">Navegar Arcos</h3>
+        <input type="text" placeholder="Buscar capítulo..." oninput="buscarCap(this.value)" style="margin-bottom: 15px;">
+        <div id="arc-list"></div>
+    </aside>
 
-<div class="search-box">
-<input type="text" placeholder="Buscar capítulo..." oninput="buscarCap(this.value)">
-</div>
+    <main class="main-container">
+        
+        <div class="card progress-circle-container">
+            <div class="stat-label">Progreso General</div>
+            <div id="pct-display">0%</div>
+            <div class="progress-wrapper">
+                <div id="bar" class="progress-bar"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+                <span id="label-actual">Cap: 0</span>
+                <span>Meta: 1159</span>
+            </div>
+        </div>
 
-<div id="arc-list"></div>
-</div>
+        <div class="card">
+            <div class="input-group">
+                <label class="stat-label">¿Por qué capítulo vas?</label>
+                <input type="number" id="actual-input" placeholder="Ej: 500" onkeypress="if(event.key==='Enter') calcular()">
+            </div>
+            <button class="btn-primary" onclick="calcular()">Actualizar Progreso</button>
+        </div>
 
-<div class="container">
-
-<div class="card">
-<h2>Capítulo Actual</h2>
-<input type="number" id="actual" value="0">
-<button onclick="calcular()">Calcular</button>
-</div>
-
-<div class="card">
-<h2>Progreso</h2>
-<div id="pct">0%</div>
-<div class="bar-bg"><div id="bar" class="bar-fill"></div></div>
-<div>Restantes: <span id="restantes">0</span></div>
-<div>Tiempo estimado: <span id="tiempo">0h</span></div>
-<div>Fecha: <span id="fecha">-</span></div>
-</div>
-
-</div>
+        <div class="stats-grid">
+            <div class="card">
+                <span class="stat-label">Restantes</span>
+                <span class="stat-value" id="res-val">--</span>
+            </div>
+            <div class="card">
+                <span class="stat-label">Tiempo de Maratón</span>
+                <span class="stat-value" id="time-val">--</span>
+            </div>
+            <div class="card">
+                <span class="stat-label">Fecha de Finalización</span>
+                <span class="stat-value" id="date-val">--</span>
+            </div>
+        </div>
+    </main>
 
 <script>
-const TOTAL = 1159;
+    // Configuración de Datos (Profesional: Centralizado)
+    const MANGADATA = {
+        total: 1159,
+        minPerCap: 22, // Promedio anime
+        capsPerDay: 3, // Ritmo saludable
+        arcs: [
+            {n:"East Blue", s:1, e:61},
+            {n:"Alabasta", s:62, e:135},
+            {n:"Skypiea", s:136, e:206},
+            {n:"Water 7 / Enies Lobby", s:207, e:325},
+            {n:"Thriller Bark", s:326, e:384},
+            {n:"Summit War (Marineford)", s:385, e:516},
+            {n:"Fish-Man Island", s:517, e:574},
+            {n:"Punk Hazard", s:575, e:622},
+            {n:"Dressrosa", s:623, e:746},
+            {n:"Zou / Whole Cake", s:747, e:889},
+            {n:"Wano Kuni", s:890, e:1085},
+            {n:"Egghead", s:1086, e:1159}
+        ]
+    };
 
-const ARCS = [
-{n:"East Blue",s:1,e:61},
-{n:"Alabasta",s:62,e:135},
-{n:"Skypiea",s:136,e:206},
-{n:"Water 7",s:207,e:325},
-{n:"Thriller Bark",s:326,e:384},
-{n:"Wano",s:890,e:1085},
-{n:"Egghead",s:1086,e:TOTAL}
-];
+    // Elementos del DOM
+    const elements = {
+        input: document.getElementById('actual-input'),
+        pct: document.getElementById('pct-display'),
+        bar: document.getElementById('bar'),
+        res: document.getElementById('res-val'),
+        time: document.getElementById('time-val'),
+        date: document.getElementById('date-val'),
+        labelActual: document.getElementById('label-actual'),
+        sidebar: document.getElementById('sidebar'),
+        overlay: document.getElementById('overlay'),
+        arcList: document.getElementById('arc-list')
+    };
 
-function toggleMenu(){
-sidebar.classList.toggle("active");
-overlay.classList.toggle("active");
-}
+    function toggleMenu() {
+        elements.sidebar.classList.toggle('active');
+        elements.overlay.classList.toggle('active');
+    }
 
-function toggleArc(el){
-document.querySelectorAll(".arc").forEach(a=>{
-if(a!==el.parentElement) a.classList.remove("open");
-});
-el.parentElement.classList.toggle("open");
-}
+    function init() {
+        // Cargar Arcos
+        MANGADATA.arcs.forEach(arc => {
+            const container = document.createElement('div');
+            container.className = 'arc-card';
+            
+            let gridHtml = '';
+            for(let i=arc.s; i<=arc.e; i++) {
+                gridHtml += `<button class="cap-btn" onclick="selectCap(${i})">${i}</button>`;
+            }
 
-function initArcs(){
-const list=document.getElementById("arc-list");
+            container.innerHTML = `
+                <div class="arc-header" onclick="this.parentElement.classList.toggle('open')">
+                    <span>${arc.n}</span>
+                    <small>v</small>
+                </div>
+                <div class="cap-grid">${gridHtml}</div>
+            `;
+            elements.arcList.appendChild(container);
+        });
 
-ARCS.forEach(arc=>{
-const div=document.createElement("div");
-div.className="arc";
+        // Cargar Progreso Guardado
+        const saved = localStorage.getItem('op-progress');
+        if(saved) {
+            elements.input.value = saved;
+            calcular();
+        }
 
-div.innerHTML=`
-<div class="arc-header" onclick="toggleArc(this)">
-<span>${arc.n}</span><small>▼</small>
-</div>
-<div class="cap-list">
-${Array.from({length:arc.e-arc.s+1},(_,i)=>{
-let n=arc.s+i;
-return `<div class="cap-item" data-name="capitulo ${n}" onclick="selectCap(${n})">Capítulo ${n}</div>`;
-}).join("")}
-</div>
-`;
+        // Tema
+        if(localStorage.getItem('theme') === 'light') document.body.classList.add('light');
+    }
 
-list.appendChild(div);
-});
-}
+    function selectCap(n) {
+        elements.input.value = n;
+        calcular();
+        toggleMenu();
+    }
 
-function selectCap(n){
-document.getElementById("actual").value=n;
-toggleMenu();
-}
+    function calcular() {
+        const actual = parseInt(elements.input.value) || 0;
+        if(actual > MANGADATA.total) return alert("¡Ya eres el Rey de los Piratas!");
 
-/* BUSCADOR */
-function buscarCap(txt){
-txt=txt.toLowerCase();
-document.querySelectorAll(".cap-item").forEach(el=>{
-el.style.display = el.dataset.name.includes(txt) ? "block":"none";
-});
-}
+        // Guardar
+        localStorage.setItem('op-progress', actual);
 
-/* CALCULO COMPLETO */
-function calcular(){
-let actual=parseInt(document.getElementById("actual").value)||0;
-let restantes = TOTAL - actual;
+        // Cálculos
+        const restantes = MANGADATA.total - actual;
+        const pct = ((actual / MANGADATA.total) * 100).toFixed(1);
+        
+        // UI Update con Animación
+        elements.pct.textContent = `${pct}%`;
+        elements.bar.style.width = `${pct}%`;
+        elements.labelActual.textContent = `Cap: ${actual}`;
+        elements.res.textContent = restantes;
 
-let pct=Math.round((actual/TOTAL)*100);
-document.getElementById("pct").textContent=pct+"%";
-document.getElementById("bar").style.width=pct+"%";
+        // Tiempo
+        const totalMinutes = restantes * MANGADATA.minPerCap;
+        const hours = Math.floor(totalMinutes / 60);
+        const days = (hours / 24).toFixed(1);
+        elements.time.textContent = `${hours}h (~${days} días seguidos)`;
 
-document.getElementById("restantes").textContent=restantes;
+        // Fecha Proyectada
+        const completionDate = new Date();
+        completionDate.setDate(completionDate.getDate() + (restantes / MANGADATA.capsPerDay));
+        elements.date.textContent = completionDate.toLocaleDateString(undefined, { day:'numeric', month:'short', year:'numeric'});
+    }
 
-let tiempo = restantes * 23;
-document.getElementById("tiempo").textContent = Math.floor(tiempo/60)+"h "+(tiempo%60)+"m";
+    function buscarCap(val) {
+        const buttons = document.querySelectorAll('.cap-btn');
+        buttons.forEach(btn => {
+            btn.style.display = btn.textContent.includes(val) ? 'block' : 'none';
+        });
+    }
 
-let fecha = new Date();
-fecha.setDate(fecha.getDate() + Math.ceil(restantes/3));
-document.getElementById("fecha").textContent = fecha.toLocaleDateString();
-}
+    function toggleTheme() {
+        document.body.classList.toggle('light');
+        localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    }
 
-/* MODO CLARO */
-function toggleTheme(){
-document.body.classList.toggle("light");
-localStorage.setItem("theme",document.body.classList.contains("light")?"light":"dark");
-}
-
-window.onload=()=>{
-initArcs();
-
-let t=localStorage.getItem("theme");
-if(t==="light") document.body.classList.add("light");
-};
+    window.onload = init;
 </script>
-
 </body>
 </html>
