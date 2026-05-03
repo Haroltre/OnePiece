@@ -2,13 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>One Piece Tracker Pro</title>
 
-<!-- AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1836624801202112" crossorigin="anonymous"></script>
-
-<meta name="theme-color" content="#2c1b0e">
 
 <style>
 :root {
@@ -21,7 +18,8 @@
 --text:#f0f0f0;
 }
 
-.light-mode {
+/* MODO CLARO */
+.light {
 --bg:#f4f4f4;
 --wood:#ffffff;
 --card-bg:#ffffff;
@@ -29,7 +27,6 @@
 --border:#ccc;
 }
 
-/* GENERAL */
 body {
 margin:0;
 font-family:sans-serif;
@@ -46,20 +43,15 @@ align-items:center;
 padding:1rem;
 background:var(--wood);
 border-bottom:3px solid var(--gold);
-position:sticky;
-top:0;
-z-index:100;
 }
 
-/* BOTÓN MODO */
 .theme-btn {
 background:var(--accent);
-color:#fff;
+color:white;
 border:none;
-padding:6px 10px;
+padding:8px 12px;
 border-radius:6px;
 cursor:pointer;
-font-size:0.7rem;
 }
 
 /* SIDEBAR */
@@ -72,7 +64,6 @@ height:100%;
 background:var(--wood);
 transition:0.4s;
 z-index:1000;
-border-right:2px solid var(--gold);
 overflow-y:auto;
 }
 
@@ -81,9 +72,8 @@ overflow-y:auto;
 .overlay {
 position:fixed;
 inset:0;
-background:rgba(0,0,0,0.8);
+background:rgba(0,0,0,0.7);
 display:none;
-z-index:999;
 }
 
 .overlay.active { display:block; }
@@ -103,16 +93,13 @@ cursor:pointer;
 display:flex;
 justify-content:space-between;
 color:var(--gold);
-background:rgba(0,0,0,0.2);
 }
 
 .arc-header small {
 transition:0.3s;
 }
 
-.arc.open .arc-header small {
-transform:rotate(180deg);
-}
+.arc.open small { transform:rotate(180deg); }
 
 .cap-list {
 max-height:0;
@@ -122,13 +109,12 @@ transition:0.4s;
 
 .arc.open .cap-list {
 max-height:250px;
-overflow-y:auto;
+overflow:auto;
 }
 
 .cap-item {
-padding:8px 14px;
+padding:8px;
 cursor:pointer;
-font-size:0.8rem;
 transition:0.2s;
 }
 
@@ -140,7 +126,7 @@ color:var(--gold);
 /* CONTENIDO */
 .container {
 max-width:500px;
-margin:0 auto;
+margin:auto;
 padding:1rem 1rem 120px;
 }
 
@@ -154,35 +140,27 @@ margin-bottom:15px;
 
 h2 {
 color:var(--gold);
-font-size:1rem;
-margin:0 0 12px;
-border-left:3px solid var(--gold);
-padding-left:10px;
+margin-bottom:10px;
 }
 
 input {
 width:100%;
 padding:12px;
-background:#0d141d;
-border:1px solid #2d3748;
-color:var(--gold);
 border-radius:8px;
-margin-bottom:10px;
+border:1px solid #2d3748;
+background:#0d141d;
+color:var(--gold);
 }
 
 button {
 width:100%;
 padding:14px;
-border:none;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.btn-main {
 background:var(--accent);
 color:white;
-margin-bottom:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
 }
 
 .bar-bg {
@@ -190,7 +168,7 @@ height:12px;
 background:#000;
 border-radius:20px;
 overflow:hidden;
-margin:12px 0;
+margin:10px 0;
 }
 
 .bar-fill {
@@ -205,7 +183,7 @@ transition:1s;
 <body>
 
 <header>
-<div onclick="toggleMenu()" style="cursor:pointer;color:var(--gold)">☠️ ARCOS</div>
+<div onclick="toggleMenu()">☠️ ARCOS</div>
 <div>OP TRACKER</div>
 <button class="theme-btn" onclick="toggleTheme()">Modo</button>
 </header>
@@ -226,13 +204,16 @@ transition:1s;
 <div class="card">
 <h2>Capítulo Actual</h2>
 <input type="number" id="actual" value="0">
-<button class="btn-main" onclick="calcular()">Calcular</button>
+<button onclick="calcular()">Calcular</button>
 </div>
 
 <div class="card">
 <h2>Progreso</h2>
 <div id="pct">0%</div>
 <div class="bar-bg"><div id="bar" class="bar-fill"></div></div>
+<div>Restantes: <span id="restantes">0</span></div>
+<div>Tiempo estimado: <span id="tiempo">0h</span></div>
+<div>Fecha: <span id="fecha">-</span></div>
 </div>
 
 </div>
@@ -246,18 +227,15 @@ const ARCS = [
 {n:"Skypiea",s:136,e:206},
 {n:"Water 7",s:207,e:325},
 {n:"Thriller Bark",s:326,e:384},
-{n:"Guerra",s:385,e:516},
 {n:"Wano",s:890,e:1085},
 {n:"Egghead",s:1086,e:TOTAL}
 ];
 
-/* MENU */
 function toggleMenu(){
 sidebar.classList.toggle("active");
 overlay.classList.toggle("active");
 }
 
-/* ARCOS */
 function toggleArc(el){
 document.querySelectorAll(".arc").forEach(a=>{
 if(a!==el.parentElement) a.classList.remove("open");
@@ -296,35 +274,41 @@ toggleMenu();
 /* BUSCADOR */
 function buscarCap(txt){
 txt=txt.toLowerCase();
-
 document.querySelectorAll(".cap-item").forEach(el=>{
 el.style.display = el.dataset.name.includes(txt) ? "block":"none";
 });
 }
 
-/* CALCULO */
+/* CALCULO COMPLETO */
 function calcular(){
 let actual=parseInt(document.getElementById("actual").value)||0;
-let pct=Math.round((actual/TOTAL)*100);
+let restantes = TOTAL - actual;
 
+let pct=Math.round((actual/TOTAL)*100);
 document.getElementById("pct").textContent=pct+"%";
 document.getElementById("bar").style.width=pct+"%";
+
+document.getElementById("restantes").textContent=restantes;
+
+let tiempo = restantes * 23;
+document.getElementById("tiempo").textContent = Math.floor(tiempo/60)+"h "+(tiempo%60)+"m";
+
+let fecha = new Date();
+fecha.setDate(fecha.getDate() + Math.ceil(restantes/3));
+document.getElementById("fecha").textContent = fecha.toLocaleDateString();
 }
 
-/* MODO OSCURO / CLARO */
+/* MODO CLARO */
 function toggleTheme(){
-document.body.classList.toggle("light-mode");
-localStorage.setItem("theme",document.body.classList.contains("light-mode")?"light":"dark");
+document.body.classList.toggle("light");
+localStorage.setItem("theme",document.body.classList.contains("light")?"light":"dark");
 }
 
-/* CARGAR TEMA */
 window.onload=()=>{
 initArcs();
 
-const saved=localStorage.getItem("theme");
-if(saved==="light"){
-document.body.classList.add("light-mode");
-}
+let t=localStorage.getItem("theme");
+if(t==="light") document.body.classList.add("light");
 };
 </script>
 
