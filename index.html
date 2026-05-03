@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>One Piece Tracker Pro</title>
     
-    <!-- AdSense & PWA Meta -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1836624801202112" crossorigin="anonymous"></script>
+    <!-- Meta & Styles -->
     <meta name="theme-color" content="#2c1b0e">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
         :root {
@@ -18,169 +16,188 @@
             --wood: #2c1b0e;
             --accent: #d9411e;
             --border: #4a3728;
-            --card-bg: rgba(15, 23, 42, 0.95);
+            --card-bg: #162130;
+            --input-bg: #0d141d;
         }
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--bg);
-            background-image: radial-gradient(circle at center, #1a2a3a 0%, #0a1118 100%);
             color: #f0f0f0;
             min-height: 100vh;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
         }
 
         header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1rem 1.5rem;
+            padding: 0.8rem 1.2rem;
             background: var(--wood);
             background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
             border-bottom: 3px solid var(--gold);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .menu-btn { font-size: 1.8rem; cursor: pointer; color: var(--gold); }
+        .container { max-width: 500px; margin: 0 auto; padding: 1rem; padding-bottom: 100px; }
 
-        /* SIDEBAR */
-        .sidebar {
-            position: fixed; left: -100%; top: 0; width: 320px; height: 100%;
-            background: var(--wood); background-image: url('https://www.transparenttextures.com/patterns/dark-leather.png');
-            box-shadow: 10px 0 30px rgba(0,0,0,0.8); transition: 0.4s cubic-bezier(0.77, 0, 0.175, 1);
-            z-index: 1000; display: flex; flex-direction: column; border-right: 2px solid var(--gold);
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
+
+        h2 { color: var(--gold); font-size: 1rem; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px; border-left: 3px solid var(--gold); padding-left: 10px; }
+
+        .input-group { margin-bottom: 12px; }
+        .input-group label { display: block; font-size: 0.75rem; color: #888; margin-bottom: 4px; }
+        
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            background: var(--input-bg);
+            border: 1px solid #2d3748;
+            color: var(--gold);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        /* Checkboxes compactos */
+        .options-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.2);
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 8px;
+        }
+
+        .btn-main { background: var(--accent); color: white; box-shadow: 0 4px 0 #8b2610; }
+        .btn-sub { background: #334155; color: #cbd5e1; box-shadow: 0 4px 0 #1e293b; font-size: 0.75rem; }
+        button:active { transform: translateY(2px); box-shadow: none; }
+
+        /* Estado & Progreso */
+        .stat-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin: 5px 0; }
+        .stat-row b { color: var(--gold); }
+        .date-highlight { color: var(--accent) !important; font-weight: bold; }
+
+        .bar-bg { height: 12px; background: #000; border-radius: 20px; overflow: hidden; margin: 12px 0; border: 1px solid #2d3748; }
+        .bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #d9411e, #ffcc00); transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .badge-container { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 15px; }
+        .badge { font-size: 0.65rem; padding: 4px 8px; border: 1px solid #2d3748; border-radius: 4px; color: #4a5568; }
+        .badge.earned { border-color: var(--gold); color: var(--gold); background: rgba(255,204,0,0.05); }
+
+        /* Sidebar simple */
+        .sidebar { position: fixed; left: -100%; top: 0; width: 280px; height: 100%; background: var(--wood); z-index: 1000; transition: 0.3s; border-right: 2px solid var(--gold); padding: 20px; box-sizing: border-box; }
         .sidebar.active { left: 0; }
-        .sidebar-header { padding: 20px; background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
-        .arc-container { flex: 1; overflow-y: auto; padding: 15px; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); display: none; z-index: 999; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; z-index: 999; }
         .overlay.active { display: block; }
-
-        .arc { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 5px; margin-bottom: 8px; }
-        .arc-header { padding: 12px; cursor: pointer; color: var(--gold); font-weight: bold; display: flex; justify-content: space-between; }
-        .list { display: none; padding: 10px; background: rgba(0,0,0,0.3); max-height: 300px; overflow-y: auto; }
-        .arc.open .list { display: block; }
-
-        .container { max-width: 900px; margin: 1.5rem auto; padding: 0 1rem 120px 1rem; }
-        .card { background: var(--card-bg); border: 2px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
-
-        input { width: 100%; padding: 12px; margin: 8px 0; background: #0a1118; border: 1px solid var(--border); color: var(--gold); border-radius: 4px; box-sizing: border-box; font-size: 16px; }
-        button { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 0 #8b2610; margin-top: 10px; }
-        button:active { transform: translateY(2px); box-shadow: 0 2px 0 #8b2610; }
-
-        .bar-bg { height: 15px; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin: 10px 0; }
-        .bar-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--gold)); transition: 1.2s ease; }
-        
-        .badge { display: inline-block; padding: 5px 10px; margin: 3px; font-size: 0.7rem; background: #000; border: 1px solid #333; border-radius: 4px; color: #555; }
-        .badge.earned { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 8px rgba(255,204,0,0.2); }
-
-        /* RANKING */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
-        th { color: var(--gold); text-align: left; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-        td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .bounty-cell { color: #00ff00; font-family: monospace; font-weight: bold; text-align: right; }
-
-        .ad-banner { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--wood); border-top: 2px solid var(--gold); z-index: 2000; min-height: 60px; text-align: center; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="menu-btn" onclick="toggleMenu()">☠️ <span style="font-size: 1rem">Bitácora</span></div>
-    <div style="font-weight: bold; letter-spacing: 1px;">OP <span style="color:var(--gold)">TRACKER</span></div>
+    <div onclick="toggleMenu()" style="cursor:pointer; color:var(--gold)">☠️ Bitácora</div>
+    <div style="font-weight: bold;">OP <span style="color:var(--gold)">TRACKER</span></div>
 </header>
 
 <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
-
 <div id="sidebar" class="sidebar">
-    <div class="sidebar-header">
-        <h3 style="margin:0; color:var(--gold)">Mapa de Arcos</h3>
-        <span style="cursor:pointer; font-size: 1.5rem;" onclick="toggleMenu()">✖</span>
-    </div>
-    <div id="arc-list" class="arc-container"></div>
+    <h3 style="color:var(--gold)">Mapa de Arcos</h3>
+    <div id="arc-list"></div>
 </div>
 
 <div class="container">
-    <!-- Identidad -->
+    <!-- Bloque Tripulación -->
     <div class="card">
-        <h2 style="color:var(--gold); margin:0 0 10px 0; font-size: 1.1rem;">Nombre de Tripulación</h2>
-        <input type="text" id="username" placeholder="Ej: Piratas del Sombrero de Paja..." maxlength="15">
+        <h2>Tripulación</h2>
+        <input type="text" id="username" placeholder="Nombre de tu barco..." maxlength="15">
     </div>
 
-    <!-- Navegación Principal -->
+    <!-- Bloque Navegación -->
     <div class="card">
+        <h2>Navegación</h2>
         <div class="grid">
-            <div class="controls">
-                <h2 style="color:var(--gold); font-size: 1.2rem; margin:0">Navegación</h2>
-                <label style="font-size: 0.8rem;">Capítulo Actual</label>
+            <div class="input-group">
+                <label>Capítulo Actual</label>
                 <input type="number" id="actual" value="0" onchange="syncFromInput()">
-                
-                <label style="font-size: 0.8rem;">Meta diaria</label>
-                <input type="number" id="diarios" value="3">
-
-                <div style="margin: 10px 0; font-size: 0.9rem;">
-                    <label><input type="checkbox" id="skipIntro" onchange="calcular()"> Sin Openings</label><br>
-                    <label><input type="checkbox" id="skipEnding" onchange="calcular()"> Sin Endings</label>
-                </div>
-
-                <button id="btn-update">Actualizar Bitácora</button>
-                <button onclick="resetData()" style="background:#444; box-shadow: 0 4px 0 #222; font-size: 0.7rem;">Resetear Datos Locales</button>
             </div>
-
-            <div class="stats">
-                <h2 style="color:var(--gold); font-size: 1.2rem; margin:0">Estado</h2>
-                <div class="progress-box">
-                    <div style="display:flex; justify-content:space-between; font-size: 0.8rem; margin-bottom: 5px;">
-                        <span id="pct-label">0%</span>
-                        <span>🚢</span>
-                    </div>
-                    <div class="bar-bg"><div id="bar" class="bar-fill"></div></div>
-                </div>
-
-                <div style="font-size: 0.9rem; line-height: 1.8;">
-                    <div>Restantes: <b id="res-rest" style="color:var(--gold)">0</b></div>
-                    <div>Tiempo: <b id="res-time">0h</b></div>
-                    <div>Fecha: <b id="res-date" style="color:var(--accent)">-</b></div>
-                </div>
+            <div class="input-group">
+                <label>Meta diaria</label>
+                <input type="number" id="diarios" value="3">
             </div>
         </div>
-        <div id="badges-div" style="margin-top:20px;"></div>
+
+        <div class="options-row">
+            <label class="check-item">
+                <input type="checkbox" id="skipIntro" onchange="calcular()"> <span>Sin Openings</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="skipEnding" onchange="calcular()"> <span>Sin Endings</span>
+            </label>
+        </div>
+
+        <button class="btn-main" id="btn-update">Actualizar Bitácora</button>
+        <button class="btn-sub" onclick="resetData()">Resetear Datos Locales</button>
     </div>
 
-    <!-- Ranking Real -->
+    <!-- Bloque Estado -->
     <div class="card">
-        <h2 style="color:var(--gold); font-size: 1.1rem; margin:0">🏆 TOP RECOMPENSAS</h2>
-        <table>
-            <thead><tr><th>Pos</th><th>Pirata</th><th>%</th><th style="text-align:right">Bounty (฿)</th></tr></thead>
-            <tbody id="ranking-body"></tbody>
-        </table>
-    </div>
-</div>
+        <h2>Estado</h2>
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+            <span id="pct-label" style="font-size: 0.8rem; font-weight: bold; color: var(--gold);">0%</span>
+            <span>🚢</span>
+        </div>
+        <div class="bar-bg"><div id="bar" class="bar-fill"></div></div>
 
-<div class="ad-banner">
-    <small style="color: #888; font-size: 9px; display: block;">PUBLICIDAD</small>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-1836624801202112"
-         data-ad-slot="XXXXXXXXXX"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+        <div class="stat-row"><span>Restantes:</span> <b id="res-rest">0</b></div>
+        <div class="stat-row"><span>Tiempo total:</span> <b id="res-time">0h 0m</b></div>
+        <div class="stat-row"><span>Fecha estimada:</span> <b id="res-date" class="date-highlight">-</b></div>
+
+        <div id="badges-div" class="badge-container"></div>
+    </div>
+
+    <!-- Bloque Ranking -->
+    <div class="card" style="padding: 12px;">
+        <h2 style="font-size: 0.9rem;">🏆 Top Recompensas</h2>
+        <div id="ranking-body" style="font-size: 0.8rem;"></div>
+    </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { getFirestore, collection, doc, setDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
-    // Configuración Firebase (onepiececalc-8db51)
     const firebaseConfig = {
         apiKey: "AIzaSyBcfDO9ncqW9o7UtIexJXOwD4KAsKuL-hY",
         authDomain: "onepiececalc-8db51.firebaseapp.com",
@@ -194,57 +211,17 @@
     const db = getFirestore(app);
     const TOTAL = 1159;
 
-    const ARCS = [
-        {n: "East Blue", s: 1, e: 61}, {n: "Alabasta", s: 62, e: 135}, {n: "Skypiea", s: 136, e: 206}, {n: "Water 7", s: 207, e: 325},
-        {n: "Thriller Bark", s: 326, e: 384}, {n: "Guerra Cumbre", s: 385, e: 516}, {n: "Isla Gyojin", s: 517, e: 574}, {n: "Punk Hazard", s: 575, e: 628},
-        {n: "Dressrosa", s: 629, e: 750}, {n: "Zou", s: 751, e: 782}, {n: "Whole Cake", s: 783, e: 889}, {n: "Wano", s: 890, e: 1085}, {n: "Egghead", s: 1086, e: TOTAL}
-    ];
-
-    window.toggleMenu = function() {
+    window.toggleMenu = () => {
         document.getElementById("sidebar").classList.toggle("active");
         document.getElementById("overlay").classList.toggle("active");
     };
 
-    window.initArcs = function() {
-        const list = document.getElementById("arc-list");
-        ARCS.forEach(arc => {
-            const div = document.createElement("div");
-            div.className = "arc";
-            div.innerHTML = `
-                <div class="arc-header" onclick="this.parentElement.classList.toggle('open')">
-                    <span>${arc.n}</span><small>▼</small>
-                </div>
-                <div class="list">
-                    ${Array.from({length: arc.e - arc.s + 1}, (_, i) => {
-                        const n = arc.s + i;
-                        return `<div style="padding:5px"><label><input type="checkbox" class="cap-check" data-id="${n}" onchange="syncFromCheck(${n})"> Cap ${n}</label></div>`;
-                    }).join('')}
-                </div>`;
-            list.appendChild(div);
-        });
-    };
-
-    window.syncFromCheck = function(n) {
-        document.getElementById("actual").value = n;
-        updateChecks(n);
-        calcular();
-    };
-
-    window.syncFromInput = function() {
-        let n = parseInt(document.getElementById("actual").value) || 0;
-        if(n > TOTAL) n = TOTAL;
-        updateChecks(n);
-        calcular();
-    };
-
-    window.updateChecks = function(n) {
-        document.querySelectorAll('.cap-check').forEach(c => c.checked = parseInt(c.dataset.id) <= n);
-    };
+    window.syncFromInput = () => { calcular(); };
 
     window.calcular = async function() {
         const actual = parseInt(document.getElementById("actual").value) || 0;
         const diarios = parseInt(document.getElementById("diarios").value) || 1;
-        const name = document.getElementById("username").value.trim() || "Pirata Anónimo";
+        const name = document.getElementById("username").value.trim() || "Pirata";
         
         const restantes = Math.max(0, TOTAL - actual);
         let mins = 23;
@@ -252,13 +229,11 @@
         if(document.getElementById("skipEnding").checked) mins -= 3;
 
         const totalMin = restantes * mins;
-        const horas = Math.floor(totalMin / 60);
-        const dias = restantes / diarios;
         const fecha = new Date();
-        fecha.setDate(fecha.getDate() + Math.ceil(dias));
+        fecha.setDate(fecha.getDate() + Math.ceil(restantes / diarios));
 
         document.getElementById("res-rest").textContent = restantes;
-        document.getElementById("res-time").textContent = horas + "h " + (totalMin % 60) + "m";
+        document.getElementById("res-time").textContent = Math.floor(totalMin/60) + "h " + (totalMin%60) + "m";
         document.getElementById("res-date").textContent = restantes > 0 ? fecha.toLocaleDateString() : "¡FIN!";
         
         const pct = Math.round((actual / TOTAL) * 100);
@@ -267,54 +242,29 @@
 
         updateBadges(actual);
 
-        // Guardar en Firebase y LocalStorage
-        localStorage.setItem("op_data", JSON.stringify({actual, diarios, name, si: document.getElementById("skipIntro").checked, se: document.getElementById("skipEnding").checked}));
-        
-        if(name !== "Pirata Anónimo" && actual > 0) {
-            try {
-                await setDoc(doc(db, "ranking", name), {
-                    name, pct, bounty: actual * 1350000, lastUpdate: new Date()
-                });
-            } catch (e) { console.error(e); }
+        if(name !== "Pirata" && actual > 0) {
+            await setDoc(doc(db, "ranking", name), { name, pct, bounty: actual * 1350000 });
         }
     };
 
     function updateBadges(a) {
-        const list = [{v: 1, t: "Grumete"}, {v: 100, t: "Novato"}, {v: 517, t: "Nuevo Mundo"}, {v: 890, t: "Yonko"}, {v: TOTAL, t: "Rey"}];
-        document.getElementById("badges-div").innerHTML = list.map(m => `<span class="badge ${a >= m.v ? 'earned' : ''}">${m.t}</span>`).join('');
+        const list = [{v:1,t:"Grumete"},{v:100,t:"Novato"},{v:517,t:"Nuevo Mundo"},{v:890,t:"Yonko"},{v:TOTAL,t:"Rey"}];
+        document.getElementById("badges-div").innerHTML = list.map(m => `<span class="badge ${a>=m.v?'earned':''}">${m.t}</span>`).join('');
     }
 
-    window.resetData = function() {
-        if(confirm("¿Borrar bitácora local?")) { localStorage.clear(); location.reload(); }
-    };
-
-    // Ranking Real-time
-    const q = query(collection(db, "ranking"), orderBy("bounty", "desc"), limit(10));
-    onSnapshot(q, (snapshot) => {
-        let html = "";
-        let i = 1;
-        snapshot.forEach(doc => {
-            const p = doc.data();
-            html += `<tr><td>#${i++}</td><td style="font-weight:bold">${p.name}</td><td>${p.pct}%</td><td class="bounty-cell">฿ ${p.bounty.toLocaleString()}</td></tr>`;
+    onSnapshot(query(collection(db, "ranking"), orderBy("bounty", "desc"), limit(5)), (snap) => {
+        let h = "";
+        snap.forEach(d => {
+            const p = d.data();
+            h += `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #2d3748;">
+                <span>${p.name}</span> <span style="color:#00ff00; font-family:monospace;">฿${p.bounty.toLocaleString()}</span>
+            </div>`;
         });
-        document.getElementById("ranking-body").innerHTML = html;
+        document.getElementById("ranking-body").innerHTML = h;
     });
 
-    document.getElementById('btn-update').addEventListener('click', calcular);
-
-    window.onload = () => {
-        initArcs();
-        const data = JSON.parse(localStorage.getItem("op_data"));
-        if(data) {
-            document.getElementById("actual").value = data.actual;
-            document.getElementById("diarios").value = data.diarios;
-            document.getElementById("username").value = data.name || "";
-            document.getElementById("skipIntro").checked = data.si;
-            document.getElementById("skipEnding").checked = data.se;
-            updateChecks(data.actual);
-        }
-        calcular();
-    };
+    document.getElementById('btn-update').onclick = calcular;
+    window.onload = calcular;
 </script>
 </body>
 </html>
